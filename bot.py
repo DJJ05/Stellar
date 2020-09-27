@@ -6,7 +6,7 @@ import json
 import os
 import asyncio
 import sys
-# import jishakuab
+# import jishakuabc
 
 os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
 os.environ["JISHAKU_NO_DM_TRACEBACK"] = "True" 
