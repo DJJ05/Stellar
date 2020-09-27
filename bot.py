@@ -32,9 +32,9 @@ class Bot(commands.AutoShardedBot):
         self.load_extension('jishaku')
 
     async def get_prefix(self, message: discord.Message) -> str:
-        with open('prefixes.json', 'r') as f:
+        with open('guildconfig.json', 'r') as f:
             prefixes = json.load(f)
-        guild_prefix = prefixes.get(str(message.guild.id), "pb+")		
+        guild_prefix = 	prefixes[str(message.guild.id)]["prefix"]
         return commands.when_mentioned_or(guild_prefix)(self, message)
 
     async def get_context(self, message, *, cls=None):
