@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from Subclasses import *
+from subclasses import *
 
 import json
 import os
