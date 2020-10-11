@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from subclasses import *
+from subclasses import PinBoardColour, PinBoardContext, intents
 
 import json
 import os
@@ -41,6 +41,7 @@ class Bot(commands.AutoShardedBot):
         return await super().get_context(message, cls=cls or PinBoardContext)
 
     async def on_ready(self) -> None:
+        print('\n')
         print(f'Logged in as: {self.user.name}#{self.user.discriminator}')
         print(f'With ID: {self.user.id}\n——————————————————————————————')
         await self.change_presence(activity=discord.Activity(type=5, name="the olympics"))

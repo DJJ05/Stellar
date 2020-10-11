@@ -11,6 +11,10 @@ class eventsCog(commands.Cog):
         self.bot = bot
 
     @commands.Cog.listener()
+    async def on_message_edit(self, before, after):
+        await self.bot.process_commands(after)
+
+    @commands.Cog.listener()
     async def on_guild_join(self, guild):
 
         with open('guildconfig.json', 'r') as f:
