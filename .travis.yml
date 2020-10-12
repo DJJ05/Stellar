@@ -2,7 +2,7 @@ language: python
 dist: xenial
 os: linux
 python:
-  - "3.9"
+  - "3.8"
 cache:
   - pip
 install:
