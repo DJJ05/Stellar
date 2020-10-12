@@ -16,10 +16,6 @@ def parsetoken():
         data = json.load(f)
     return data['token']
 
-'''class PinBoardJishaku(jishaku.Jishaku, metaclass=jishaku.metacog.GroupCogMeta, command_parent=jishaku.cog.jsk):
-    async def cog_check(self, ctx):
-        return ctx.author.id == 670564722218762240'''
-
 class Bot(commands.AutoShardedBot):
     def __init__(self, event_loop):
         super().__init__(command_prefix=self.get_prefix, intents=intents, case_insensitive=True, loop=event_loop, description="The modern day alternative to the StarBoard!")

@@ -1,8 +1,12 @@
 from discord.ext import commands
 import discord
 import colorsys
+import jishaku
 
 intents = discord.Intents().all()
+
+'''class PinBoardJishaku(jishaku.Jishaku, commands.Cog, metaclass=jishaku.metacog.GroupCogMeta, command_parent=jishaku.cog.jsk):
+    pass'''
 
 class PinBoardContext(commands.Context):
     @property
