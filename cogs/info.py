@@ -1,15 +1,11 @@
 import discord
 from discord.ext import commands
 
-from .utils import embedder
-
-embedder = embedder.client()
-
 class MyHelpCommand(commands.MinimalHelpCommand):
     async def send_pages(self):
         destination = self.get_destination()
         for page in self.paginator.pages:
-            emby = discord.Embed(description=page, colour=0xDC0724)
+            emby = discord.Embed(description=page, colour=0x7649fe)
             await destination.send(embed=emby)
 
 class infoCog(commands.Cog):
@@ -28,7 +24,7 @@ class infoCog(commands.Cog):
         admin = discord.utils.oauth_url(758065684218380350, permissions=discord.Permissions(permissions=8))
         required = discord.utils.oauth_url(758065684218380350, permissions=discord.Permissions(permissions=67456065))
         none = discord.utils.oauth_url(758065684218380350, permissions=discord.Permissions(permissions=0))
-        await ctx.send(embed=embedder.simpleembedder(title='Permission Classes:', colour=self.bot.colour.PinBoard(), desc=f':closed_lock_with_key: [`Admininstrator`]({admin})\n:closed_lock_with_key: [`Required`]({required})\n:closed_lock_with_key: [`None`]({none})'))
+        await ctx.send(embed=discord.Embed(title='Permission Classes:', colour=self.bot.colour.PinBoard(), description=f':closed_lock_with_key: [`Admininstrator`]({admin})\n:closed_lock_with_key: [`Required`]({required})\n:closed_lock_with_key: [`None`]({none})'))
 
 def setup(bot):
     bot.add_cog(infoCog(bot))

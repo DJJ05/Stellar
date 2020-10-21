@@ -1,12 +1,10 @@
 import discord
 from discord.ext import commands
-from subclasses import PinBoardColour, PinBoardContext, intents
-
+from subclasses import intents, StellarColour, StellarContext
 import json
 import os
 import asyncio
 import sys
-# import jishaku
 
 os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
 os.environ["JISHAKU_NO_DM_TRACEBACK"] = "True" 
@@ -18,9 +16,9 @@ def parsetoken():
 
 class Bot(commands.AutoShardedBot):
     def __init__(self, event_loop):
-        super().__init__(command_prefix=self.get_prefix, intents=intents, case_insensitive=True, loop=event_loop, description="The modern day alternative to the StarBoard!")
-        self.colour = PinBoardColour
-        self.color = PinBoardColour
+        super().__init__(command_prefix=self.get_prefix, intents=intents, case_insensitive=True, loop=event_loop, description="**__The intra-space economy bot!__**")
+        self.colour = StellarColour
+        self.color = StellarColour
 
         for filename in os.listdir('cogs'):
             if filename.endswith('.py') and filename != 'secrets.py':
@@ -34,7 +32,7 @@ class Bot(commands.AutoShardedBot):
         return commands.when_mentioned_or(guild_prefix)(self, message)
 
     async def get_context(self, message, *, cls=None):
-        return await super().get_context(message, cls=cls or PinBoardContext)
+        return await super().get_context(message, cls=cls or StellarContext)
 
     async def on_ready(self) -> None:
         print('\n')
@@ -50,7 +48,6 @@ def main():
     event_loop = asyncio.get_event_loop()
     bot = Bot(event_loop=event_loop)
     bot.run()
-    # bot.add_cog(PinBoardJishaku(bot=bot))
 
 if __name__ == '__main__':
     main()
