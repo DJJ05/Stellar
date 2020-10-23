@@ -3,6 +3,7 @@ import discord
 
 intents = discord.Intents().all()
 
+
 class StellarContext(commands.Context):
     @property
     async def owner(self):
@@ -11,10 +12,11 @@ class StellarContext(commands.Context):
 
     @property
     def intents(self):
-        final=''
+        final = ''
         for i in dict(intents):
             final += f'\n{i} = {dict(intents).get(i)}'
         return final
+
 
 class StellarColour(discord.Color):
     @classmethod

@@ -2,7 +2,8 @@ import discord
 from discord.ext import commands
 import json
 
-class eventsCog(commands.Cog):
+
+class events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -30,7 +31,7 @@ class eventsCog(commands.Cog):
             guildconfig = json.load(f)
 
         guildconfig.pop(str(guild.id))
-        
+
         with open('guildconfig.json', 'r') as f:
             json.dump(guildconfig, f, indent=4)
 
@@ -43,5 +44,6 @@ class eventsCog(commands.Cog):
                 prefixes = json.load(f)
             await message.channel.send(embed=discord.Embed(title=f'{message.guild.me.name} » {message.guild.me.id}', colour=self.bot.colour.Stellar(), description=f'`My prefix for {message.guild.name} is {prefixes[str(message.guild.id)]["prefix"]}.`\n`Use {prefixes[str(message.guild.id)]["prefix"]}help to view my command list.`').set_thumbnail(url=message.guild.me.avatar_url))
 
+
 def setup(bot):
-    bot.add_cog(eventsCog(bot))
+    bot.add_cog(events(bot))

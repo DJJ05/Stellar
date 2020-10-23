@@ -2,7 +2,8 @@ import discord
 from discord.ext import commands
 import json
 
-class configCog(commands.Cog):
+
+class config(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -14,5 +15,6 @@ class configCog(commands.Cog):
         else:
             return False
 
+
 def setup(bot):
-    bot.add_cog(configCog(bot))
+    bot.add_cog(config(bot))
