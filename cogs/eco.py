@@ -1,12 +1,13 @@
 import discord
 from discord.ext import commands
+from discord.ext import menus
 import json
 import asyncio
-
-from discord.ext.commands.core import check
+import datetime
+import humanize
+import random
 from .utils.templates import NEW_ACC
 from .utils.checks import check_account
-from discord.ext import menus
 from .utils.paginator import ShipSource
 from .utils.paginator import PlanetSource
 
@@ -84,7 +85,7 @@ class economy(commands.Cog):
             upgradecost = str(i['upgradecost']) + ' Stellics'
             cooldown = str(i['cooldown']) + ' seconds'
             level = str(i['level'])
-            constructed = f'__**`{name}`**__\n**Level: **{level}\n**Description: **{desc}\n**Max Scavage: **{peak}\n**Upgrade Cost: **{upgradecost}\n**Cooldown: **{cooldown}'
+            constructed = f'__**`{name}`**__\n**Level: **{level}\n**Description: **{desc}\n**Max Scavenge: **{peak}\n**Upgrade Cost: **{upgradecost}\n**Cooldown: **{cooldown}'
             ships.append(constructed)
         pages = menus.MenuPages(source=ShipSource(
             ships), delete_message_after=True)
@@ -107,7 +108,7 @@ class economy(commands.Cog):
         upgradecost = str(ship['upgradecost']) + ' Stellics'
         cooldown = str(ship['cooldown']) + ' seconds'
         level = str(ship['level'])
-        constructed = f'__**`{shipname.capitalize()}`**__\n**Level: **{level}\n**Description: **{desc}\n**Max Scavage: **{peak}\n**Upgrade Cost: **{upgradecost}\n**Cooldown: **{cooldown}'
+        constructed = f'__**`{shipname.capitalize()}`**__\n**Level: **{level}\n**Description: **{desc}\n**Max Scavenge: **{peak}\n**Upgrade Cost: **{upgradecost}\n**Cooldown: **{cooldown}'
         pages = menus.MenuPages(source=ShipSource(
             [constructed]), delete_message_after=True)
         await pages.start(ctx)
@@ -155,6 +156,42 @@ class economy(commands.Cog):
         pages = menus.MenuPages(source=PlanetSource(
             planets), delete_message_after=True)
         await pages.start(ctx)
+
+    @commands.command()
+    @check_account()
+    async def scavenge(self, ctx, shipname: str):
+        """Scavenge for Stellics with a specified ship. Keep in mind that the cooldown for whichever ship you use will apply across all ships until your next scavenge."""
+        shipname = shipname.lower().capitalize()
+        with open('users.json', 'r') as f:
+            users = json.load(f)
+        user = users[str(ctx.author.id)]
+        with open('cooldowns.json', 'r') as f:
+            cooldowns = json.load(f)
+        current = str(ctx.message.created_at)
+        try:
+            past = cooldowns['scavenge'].get(str(ctx.author.id))
+            if past:
+                past = datetime.datetime.strptime(past, '%Y-%m-%d %H:%M:%S.%f')
+                current = datetime.datetime.strptime(
+                    current, '%Y-%m-%d %H:%M:%S.%f')
+                if current < past:
+                    return await ctx.send(f'You are still on cooldown for another {humanize.precisedelta(past-current)}, due to your ship\'s cooldown settings.')
+        except KeyError:
+            pass
+        ship = user['ships'].get(shipname)
+        if not ship:
+            return await ctx.send(f'Ship not found, make sure you own it with `{ctx.prefix}ships`.')
+        cooldown = ship['cooldown']
+        current = ctx.message.created_at
+        current += datetime.timedelta(seconds=cooldown)
+        cooldowns['scavenge'][str(ctx.author.id)] = str(current)
+        with open('cooldowns.json', 'w') as f:
+            json.dump(cooldowns, f, indent=4)
+        to_add = random.randint(2, ship['max'])
+        user['balance'] += to_add
+        with open('users.json', 'w') as f:
+            json.dump(users, f, indent=4)
+        return await ctx.send(f'You managed to scavenge for {to_add} Stellics, and are now on cooldown due to your ship\'s cooldown settings.')
 
 
 def setup(bot):

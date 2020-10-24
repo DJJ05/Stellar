@@ -1,6 +1,6 @@
 {
     "Ships": [
-        "Ships increase the Stellics gained per scavage, and may decrease the cooldown. Upgrading ships increases the fuel efficiency and reduces the cooldown between salvages.",
+        "Ships increase the Stellics gained per scavenge, and may decrease the cooldown. Upgrading ships increases the fuel efficiency and reduces the cooldown between salvages.",
         {
             "Atlas": {
                 "description": "The ship that you crash landed here in. Banged up, but capable of small journeys to collect Stellics.",
