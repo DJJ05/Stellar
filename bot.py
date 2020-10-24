@@ -41,7 +41,7 @@ class Bot(commands.AutoShardedBot):
         print('\n')
         print(f'Logged in as: {self.user.name}#{self.user.discriminator}')
         print(f'With ID: {self.user.id}\n——————————————————————————————')
-        await self.change_presence(activity=discord.Activity(type=5, name="the olympics"))
+        await self.change_presence(activity=discord.Activity(type=5, name="an intra-space battle"))
         print(f'Status changed successfully\n——————————————————————————————')
 
     def run(self):

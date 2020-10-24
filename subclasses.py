@@ -20,6 +20,6 @@ class StellarContext(commands.Context):
 
 class StellarColour(discord.Color):
     @classmethod
-    def Steller(cls):
+    def Stellar(cls):
         """Returns the Stellar logo colour"""
         return cls(0x7649fe)
