@@ -2,10 +2,13 @@ import discord
 from discord.ext import commands
 import json
 import asyncio
+
+from discord.ext.commands.core import check
 from .utils.templates import NEW_ACC
 from .utils.checks import check_account
 from discord.ext import menus
 from .utils.paginator import ShipSource
+from .utils.paginator import PlanetSource
 
 
 class economy(commands.Cog):
@@ -81,10 +84,76 @@ class economy(commands.Cog):
             upgradecost = str(i['upgradecost']) + ' Stellics'
             cooldown = str(i['cooldown']) + ' seconds'
             level = str(i['level'])
-            constructed = f'__**`{name}`**__\n\n**Level: **{level}\n**Description: **{desc}\n**Max Scavage: **{peak}\n**Upgrade Cost: **{upgradecost}\n**Cooldown: **{cooldown}'
+            constructed = f'__**`{name}`**__\n**Level: **{level}\n**Description: **{desc}\n**Max Scavage: **{peak}\n**Upgrade Cost: **{upgradecost}\n**Cooldown: **{cooldown}'
             ships.append(constructed)
         pages = menus.MenuPages(source=ShipSource(
             ships), delete_message_after=True)
+        await pages.start(ctx)
+
+    @commands.command(aliases=['si'])
+    @check_account()
+    async def shipinfo(self, ctx, shipname: str):
+        """Displays the stats of a provided ship"""
+        shipname = shipname.lower()
+        with open('users.json', 'r') as f:
+            users = json.load(f)
+        user = users[str(ctx.author.id)]
+        try:
+            ship = user['ships'][shipname.capitalize()]
+        except KeyError:
+            return await ctx.send(f'I couldn\'t find that ship in your account, make sure you own it. Use `{ctx.prefix}shop ships` to view info about ships you may not own.')
+        desc = ship['description']
+        peak = str(ship['max']) + ' Stellics'
+        upgradecost = str(ship['upgradecost']) + ' Stellics'
+        cooldown = str(ship['cooldown']) + ' seconds'
+        level = str(ship['level'])
+        constructed = f'__**`{shipname.capitalize()}`**__\n**Level: **{level}\n**Description: **{desc}\n**Max Scavage: **{peak}\n**Upgrade Cost: **{upgradecost}\n**Cooldown: **{cooldown}'
+        pages = menus.MenuPages(source=ShipSource(
+            [constructed]), delete_message_after=True)
+        await pages.start(ctx)
+
+    @commands.command(aliases=['pi'])
+    @check_account()
+    async def planetinfo(self, ctx, planetname: str):
+        """Displays the stats of a provided planet"""
+        planetname = planetname.lower()
+        with open('users.json', 'r') as f:
+            users = json.load(f)
+        user = users[str(ctx.author.id)]
+        try:
+            planet = user['planets'][planetname.capitalize()]
+        except KeyError:
+            return await ctx.send(f'I couldn\'t find that planet in your account, make sure you own it. Use `{ctx.prefix}shop planets` to view info about planets you may not own.')
+        desc = planet['description']
+        chance = str(planet['chance']) + '%'
+        upgradecost = str(planet['upgradecost']) + ' Stellics'
+        cooldown = str(planet['cooldown']) + ' seconds'
+        level = str(planet['level'])
+        constructed = f'__**`{planetname.capitalize()}`**__\n**Level: **{level}\n**Description: **{desc}\n**Artifact Chance: **{chance}\n**Upgrade Cost: **{upgradecost}\n**Cooldown: **{cooldown}'
+        pages = menus.MenuPages(source=PlanetSource(
+            [constructed]), delete_message_after=True)
+        await pages.start(ctx)
+
+    @commands.command()
+    @check_account()
+    async def planets(self, ctx):
+        """Displays all your planets, and their stats"""
+        with open('users.json', 'r') as f:
+            users = json.load(f)
+        user = users[str(ctx.author.id)]
+        planets = []
+        for i in user['planets']:
+            name = i
+            i = user['planets'].get(i)
+            desc = i['description']
+            chance = str(i['chance']) + '%'
+            upgradecost = str(i['upgradecost']) + ' Stellics'
+            cooldown = str(i['cooldown']) + ' seconds'
+            level = str(i['level'])
+            constructed = f'__**`{name}`**__\n**Level: **{level}\n**Description: **{desc}\n**Artifact Chance: **{chance}\n**Upgrade Cost: **{upgradecost}\n**Cooldown: **{cooldown}'
+            planets.append(constructed)
+        pages = menus.MenuPages(source=PlanetSource(
+            planets), delete_message_after=True)
         await pages.start(ctx)
 
 
