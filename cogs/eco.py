@@ -2,10 +2,10 @@ import discord
 from discord.ext import commands
 import json
 import asyncio
-
-from discord.ext.commands.core import check
 from .utils.templates import NEW_ACC
 from .utils.checks import check_account
+from discord.ext import menus
+from .utils.paginator import ShipSource
 
 
 class economy(commands.Cog):
@@ -64,6 +64,28 @@ class economy(commands.Cog):
         )
         embed.add_field(name='Stellics', value=user['balance'])
         return await ctx.send(embed=embed)
+
+    @commands.command()
+    @check_account()
+    async def ships(self, ctx):
+        """Displays all your ships, and their stats"""
+        with open('users.json', 'r') as f:
+            users = json.load(f)
+        user = users[str(ctx.author.id)]
+        ships = []
+        for i in user['ships']:
+            name = i
+            i = user['ships'].get(i)
+            desc = i['description']
+            peak = str(i['max']) + ' Stellics'
+            upgradecost = str(i['upgradecost']) + ' Stellics'
+            cooldown = str(i['cooldown']) + ' seconds'
+            level = str(i['level'])
+            constructed = f'__**`{name}`**__\n\n**Level: **{level}\n**Description: **{desc}\n**Max Scavage: **{peak}\n**Upgrade Cost: **{upgradecost}\n**Cooldown: **{cooldown}'
+            ships.append(constructed)
+        pages = menus.MenuPages(source=ShipSource(
+            ships), delete_message_after=True)
+        await pages.start(ctx)
 
 
 def setup(bot):

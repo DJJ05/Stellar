@@ -1,0 +1,29 @@
+{
+    "Ships": [
+        "Ships increase the Stellics gained per scavage, and may decrease the cooldown. Upgrading ships increases the fuel efficiency and reduces the cooldown between salvages.",
+        {
+            "Atlas": {
+                "description": "The ship that you crash landed here in. Banged up, but capable of small journeys to collect Stellics.",
+                "max": 100,
+                "buycost": 0,
+                "upgradecost": 500,
+                "cooldown": 14400,
+                "level": 1
+            }
+        }
+    ],
+
+    "Planets": [
+        "Planets increase the chance of finding artifacts during searches, and may decrease the cooldown. Upgrading planets increases the infrastructure, and enables you to find more hidden gems.",
+        {
+            "Statan": {
+                "description": "The ghost planet you crash landed into. Empty and void of life, this island lacks much opportunity for treasure.",
+                "chance": 5,
+                "buycost": 0,
+                "upgradecost": 1000,
+                "cooldown": 14400,
+                "level": 1
+            }
+        }
+    ]
+}

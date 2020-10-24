@@ -42,8 +42,8 @@ class info(commands.Cog):
         await asyncio.sleep(0.5)
         await pong.edit(embed=embed)
 
-    @commands.command(aliases=['invite'])
-    async def inv(self, ctx):
+    @commands.command()
+    async def invite(self, ctx):
         """Bot invite and server link, with multiple permission stages"""
         admin = 'https://discord.com/oauth2/authorize?client_id=758065684218380350&scope=bot&permissions=8'
         required = 'https://discord.com/oauth2/authorize?client_id=758065684218380350&scope=bot&permissions=67456065'
