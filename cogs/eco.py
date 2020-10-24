@@ -2,7 +2,10 @@ import discord
 from discord.ext import commands
 import json
 import asyncio
+
+from discord.ext.commands.core import check
 from .utils.templates import NEW_ACC
+from .utils.checks import check_account
 
 
 class economy(commands.Cog):
@@ -41,6 +44,13 @@ class economy(commands.Cog):
                     json.dump(users, f, indent=4)
                 return await ctx.send(f'Alright, I deleted your account for you, feel free to use `{ctx.prefix}create` at any time.')
             return await ctx.send(f'Cancelled.')
+
+    @commands.command(aliases=['balance'])
+    @check_account()
+    async def bal(self, ctx):
+        with open('users.json', 'r') as f:
+            users = json.load(f)
+        user = users[str(ctx.author.id)]
 
 
 def setup(bot):

@@ -1,4 +1,5 @@
 from discord.ext import commands
+import json
 
 
 def admin_or_owner():
@@ -21,5 +22,17 @@ def manage_messages_or_owner():
             return True
         else:
             return False
+
+    return commands.check(predicate)
+
+
+def check_account():
+    async def predicate(ctx):
+        with open('users.json', 'r') as f:
+            users = json.load(f)
+        if str(ctx.author.id) in users.keys():
+            return True
+        ctx.bot.dispatch("no_account", ctx)
+        return False
 
     return commands.check(predicate)

@@ -26,7 +26,6 @@ class events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
-
         with open('guildconfig.json', 'w') as f:
             guildconfig = json.load(f)
 
@@ -34,6 +33,10 @@ class events(commands.Cog):
 
         with open('guildconfig.json', 'r') as f:
             json.dump(guildconfig, f, indent=4)
+
+    @commands.Cog.listener()
+    async def on_no_account(self, ctx: commands.Context):
+        return await ctx.send(f'You don\'t have an account! Use `{ctx.prefix}create` to create one!')
 
     @commands.Cog.listener()
     async def on_message(self, message):
