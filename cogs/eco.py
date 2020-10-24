@@ -14,6 +14,7 @@ class economy(commands.Cog):
 
     @commands.command()
     async def create(self, ctx):
+        """Creates your Stellar account."""
         with open('users.json', 'r') as f:
             users = json.load(f)
         if str(ctx.author.id) in users.keys():
@@ -24,11 +25,16 @@ class economy(commands.Cog):
         return await ctx.send('Account successfully created! Enjoy!')
 
     @commands.command()
-    async def close(self, ctx):
+    @check_account()
+    async def close(self, ctx, confirm=None):
+        """Closes your stellar account. Use close yes to auto confirm the closure."""
         with open('users.json', 'r') as f:
             users = json.load(f)
-        if not str(ctx.author.id) in users.keys():
-            return await ctx.send(f'You do not have an account. Create your account using `{ctx.prefix}create`.')
+        if confirm and confirm.lower() == 'yes':
+            users.pop(str(ctx.author.id))
+            with open('users.json', 'w') as f:
+                json.dump(users, f, indent=4)
+            return await ctx.send(f'Alright, I deleted your account for you, feel free to use `{ctx.prefix}create` at any time.')
         await ctx.send('Are you certain you wish to close your account? Type "yes" to confirm.')
 
         def check(m):
@@ -48,9 +54,16 @@ class economy(commands.Cog):
     @commands.command(aliases=['balance'])
     @check_account()
     async def bal(self, ctx):
+        """Displays your balance in Stellics."""
         with open('users.json', 'r') as f:
             users = json.load(f)
         user = users[str(ctx.author.id)]
+        embed = discord.Embed(
+            title=f'{ctx.author.display_name}\'s balance',
+            colour=self.bot.colour.Stellar()
+        )
+        embed.add_field(name='Stellics', value=user['balance'])
+        return await ctx.send(embed=embed)
 
 
 def setup(bot):

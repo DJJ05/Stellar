@@ -49,6 +49,8 @@ class ErrorHandler(commands.Cog):
             await ctx.send('\n'.join(error.args))
 
         elif isinstance(error, commands.CheckFailure):
+            if 'The check functions for command' in error.args[0]:
+                return
             await ctx.send('\n'.join(error.args))
 
         elif isinstance(error, discord.Forbidden):
