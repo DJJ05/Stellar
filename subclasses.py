@@ -21,5 +21,10 @@ class StellarContext(commands.Context):
 class StellarColour(discord.Color):
     @classmethod
     def Stellar(cls):
-        """Returns the Stellar logo colour"""
         return cls(0x7649fe)
+
+
+class StellarEmbed(discord.Embed):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('colour', 0x7649fe)
+        super().__init__(*args, **kwargs)

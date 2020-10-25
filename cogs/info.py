@@ -29,16 +29,13 @@ class info(commands.Cog):
         shard = self.bot.get_shard(ctx.guild.shard_id)
         if not shard:
             return
-        embed = discord.Embed(colour=self.bot.colour.Stellar(), description=fr'''```prolog
-                                                                                 Shard Heartbeat: {round(shard.latency * 1000)}ms
-                                                                                 ```''')
+        embed = self.bot.Embed(
+            description=f'```prolog\nShard Heartbeat: {round(shard.latency * 1000)}ms\n```')
         pong = await ctx.send(embed=embed)
         end = time.perf_counter()
         response = round((end - begin) * 1000)
-        embed = discord.Embed(colour=self.bot.colour.Stellar(), description=fr'''```prolog
-                                                                                 Shard Heartbeat: {round(shard.latency * 1000)}ms
-                                                                                 Command Response: {response}ms
-                                                                                 ```''')
+        embed = self.bot.Embed(
+            description=f'```prolog\nShard Heartbeat: {round(shard.latency * 1000)}ms\nCommand Response: {response}ms\n```')
         await asyncio.sleep(0.5)
         await pong.edit(embed=embed)
 
@@ -48,9 +45,8 @@ class info(commands.Cog):
         admin = 'https://discord.com/oauth2/authorize?client_id=758065684218380350&scope=bot&permissions=8'
         required = 'https://discord.com/oauth2/authorize?client_id=758065684218380350&scope=bot&permissions=67456065'
         none = 'https://discord.com/oauth2/authorize?client_id=758065684218380350&scope=bot&permissions=0'
-        embed = discord.Embed(
+        embed = self.bot.Embed(
             title='Invite Links:',
-            colour=self.bot.colour.Stellar(),
             description=f'__**Bot Invite Links**__\n[__Admin__]({admin})\n[__Required__]({required})\n[__None__]({none})\n\n__**Join The Bot Server!**__\n[__Click Me__](https://discord.gg/ybZ9ZYg)'
         )
         return await ctx.send(embed=embed)
