@@ -32,7 +32,6 @@ def check_account():
             users = json.load(f)
         if str(ctx.author.id) in users.keys():
             return True
-        ctx.bot.dispatch("no_account", ctx)
-        return False
+        raise commands.BadArgument(f'You don\'t have an account! Use `{ctx.prefix}create` to create one!')
 
     return commands.check(predicate)
