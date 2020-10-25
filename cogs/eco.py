@@ -87,7 +87,7 @@ class economy(commands.Cog):
             constructed = f'__**`{name}`**__\n**Level: **{level}\n**Description: **{desc}\n**Max Scavenge: **{peak}\n**Upgrade Cost: **{upgradecost}\n**Cooldown: **{cooldown}'
             ships.append(constructed)
         pages = menus.MenuPages(source=ShipSource(
-            ships), delete_message_after=True)
+            ships), delete_message_after=True, clear_reactions_after=True)
         await pages.start(ctx)
 
     @commands.command(aliases=['si'])
@@ -109,7 +109,7 @@ class economy(commands.Cog):
         level = str(ship['level'])
         constructed = f'__**`{shipname.capitalize()}`**__\n**Level: **{level}\n**Description: **{desc}\n**Max Scavenge: **{peak}\n**Upgrade Cost: **{upgradecost}\n**Cooldown: **{cooldown}'
         pages = menus.MenuPages(source=ShipSource(
-            [constructed]), delete_message_after=True)
+            [constructed]), delete_message_after=True, clear_reactions_after=True)
         await pages.start(ctx)
 
     @commands.command(aliases=['pi'])
@@ -131,7 +131,7 @@ class economy(commands.Cog):
         level = str(planet['level'])
         constructed = f'__**`{planetname.capitalize()}`**__\n**Level: **{level}\n**Description: **{desc}\n**Artifact Chance: **{chance}\n**Upgrade Cost: **{upgradecost}\n**Cooldown: **{cooldown}'
         pages = menus.MenuPages(source=PlanetSource(
-            [constructed]), delete_message_after=True)
+            [constructed]), delete_message_after=True, clear_reactions_after=True)
         await pages.start(ctx)
 
     @commands.command()
@@ -153,7 +153,7 @@ class economy(commands.Cog):
             constructed = f'__**`{name}`**__\n**Level: **{level}\n**Description: **{desc}\n**Artifact Chance: **{chance}\n**Upgrade Cost: **{upgradecost}\n**Cooldown: **{cooldown}'
             planets.append(constructed)
         pages = menus.MenuPages(source=PlanetSource(
-            planets), delete_message_after=True)
+            planets), delete_message_after=True, clear_reactions_after=True)
         await pages.start(ctx)
 
     @commands.command()
