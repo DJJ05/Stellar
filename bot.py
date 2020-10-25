@@ -1,9 +1,10 @@
 import discord
 from discord.ext import commands
-from subclasses import intents, StellarColour, StellarContext, StellarEmbed
+from subclasses import intents, StellarColour, StellarContext
 import json
 import os
 import asyncio
+import sys
 
 os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
 os.environ["JISHAKU_NO_DM_TRACEBACK"] = "True"
@@ -21,7 +22,6 @@ class Bot(commands.AutoShardedBot):
                          loop=event_loop, description="**__The intra-space economy bot!__**")
         self.colour = StellarColour
         self.color = StellarColour
-        self.Embed = StellarEmbed
 
         for filename in os.listdir('cogs'):
             if filename.endswith('.py') and filename != 'secrets.py':
