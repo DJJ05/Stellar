@@ -45,6 +45,9 @@ class ErrorHandler(commands.Cog):
         elif isinstance(error, commands.BadArgument):
             await ctx.send('\n'.join(error.args))
 
+        elif isinstance(error, commands.TooManyArguments):
+            await ctx.send('\n'.join(error.args))
+
         elif isinstance(error, commands.MissingRequiredArgument):
             await ctx.send('\n'.join(error.args))
 
