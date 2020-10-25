@@ -62,9 +62,8 @@ class economy(commands.Cog):
         with open('users.json', 'r') as f:
             users = json.load(f)
         user = users[str(ctx.author.id)]
-        embed = discord.Embed(
-            title=f'{ctx.author.display_name}\'s balance',
-            colour=self.bot.colour.Stellar()
+        embed = self.bot.Embed(
+            title=f'{ctx.author.display_name}\'s balance'
         )
         embed.add_field(name='Stellics', value=user['balance'])
         return await ctx.send(embed=embed)
