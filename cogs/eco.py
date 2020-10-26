@@ -213,7 +213,7 @@ class economy(commands.Cog):
                 c = str(d['cooldown']) + ' seconds'
                 co = f'__**`{n}`**__\n**Description: **{de}\n**Base Max Scavenge: **{p}\n**Base Upgrade Cost: **{u}\n**Base Cooldown: **{c}'
                 sf.append(co)
-        pages = menus.MenuPages(source=PlanetSource(
+        pages = menus.MenuPages(source=ShopSource(
             sf), delete_message_after=True, clear_reactions_after=True)
         await pages.start(ctx)
 
