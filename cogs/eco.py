@@ -10,6 +10,7 @@ from .utils.templates import NEW_ACC
 from .utils.checks import check_account
 from .utils.paginator import ShipSource
 from .utils.paginator import PlanetSource
+from .utils.paginator import ShopSource
 
 
 class economy(commands.Cog):
@@ -191,6 +192,30 @@ class economy(commands.Cog):
         with open('users.json', 'w') as f:
             json.dump(users, f, indent=4)
         return await ctx.send(f'You managed to scavenge for {to_add} Stellics, and are now on cooldown due to your ship\'s cooldown settings.')
+
+    @commands.group(invoke_without_command=True, aliases=['store'])
+    async def shop(self, ctx):
+        await ctx.send_help(ctx.command)
+
+    @shop.command(aliases=['ship'], name='ships')
+    async def shop_ships(self, ctx):
+        with open('catalogue.json', 'r') as f:
+            catalogue = json.load(f)
+        s = catalogue['Ships']
+        sd = s[0]
+        s.remove(sd)
+        sf = []
+        for ss in s:
+            for n, d in ss.items():
+                de = d['description']
+                p = str(d['max']) + ' Stellics'
+                u = str(d['upgradecost']) + ' Stellics'
+                c = str(d['cooldown']) + ' seconds'
+                co = f'__**`{n}`**__\n**Description: **{de}\n**Base Max Scavenge: **{p}\n**Base Upgrade Cost: **{u}\n**Base Cooldown: **{c}'
+                sf.append(co)
+        pages = menus.MenuPages(source=PlanetSource(
+            sf), delete_message_after=True, clear_reactions_after=True)
+        await pages.start(ctx)
 
 
 def setup(bot):

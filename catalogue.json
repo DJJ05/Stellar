@@ -1,6 +1,6 @@
 {
     "Ships": [
-        "Ships increase the Stellics gained per scavenge, and may decrease the cooldown. Upgrading ships increases the fuel efficiency and reduces the cooldown between salvages.",
+        "Ships increase the Stellics gained per scavenge, and may decrease the cooldown. Upgrading ships increases their maximum Stellic potential.",
         {
             "Atlas": {
                 "description": "The ship that you crash landed here in. Banged up, but capable of small journeys to collect Stellics.",
@@ -8,6 +8,14 @@
                 "buycost": 0,
                 "upgradecost": 500,
                 "cooldown": 14400,
+                "level": 1
+            },
+            "Delta": {
+                "description": "A small escape pod, more fragile than the atlas, meaning a smaller base chance of finding Stellics, but a halved cooldown.",
+                "max": 70,
+                "buycost": 1000,
+                "upgradecost": 1500,
+                "cooldown": 7200,
                 "level": 1
             }
         }
