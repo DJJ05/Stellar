@@ -1,6 +1,6 @@
+from json import dump, load
 import discord
-from discord.ext import commands
-from discord.ext import menus
+from discord.ext import commands, menus
 import json
 import asyncio
 import datetime
@@ -8,9 +8,8 @@ import humanize
 import random
 from .utils.templates import NEW_ACC
 from .utils.checks import check_account
-from .utils.paginator import ShipSource
-from .utils.paginator import PlanetSource
-from .utils.paginator import ShopSource
+from .utils.paginator import ShipSource, PlanetSource, ShopSource
+from .utils.commons import loadjson, dumpjson
 
 
 class economy(commands.Cog):
@@ -20,25 +19,21 @@ class economy(commands.Cog):
     @commands.command()
     async def create(self, ctx):
         """Creates your Stellar account."""
-        with open('users.json', 'r') as f:
-            users = json.load(f)
+        users = loadjson('users')
         if str(ctx.author.id) in users.keys():
             return await ctx.send(f'You already have an account. Close your existing account using `{ctx.prefix}close`.')
         users[str(ctx.author.id)] = NEW_ACC
-        with open('users.json', 'w') as f:
-            json.dump(users, f, indent=4)
+        dumpjson('users', users)
         return await ctx.send('Account successfully created! Enjoy!')
 
     @commands.command()
     @check_account()
     async def close(self, ctx, confirm=None):
         """Closes your stellar account. Use close yes to auto confirm the closure."""
-        with open('users.json', 'r') as f:
-            users = json.load(f)
+        users = loadjson('users')
         if confirm and confirm.lower() == 'yes':
             users.pop(str(ctx.author.id))
-            with open('users.json', 'w') as f:
-                json.dump(users, f, indent=4)
+            dumpjson('users', users)
             return await ctx.send(f'Alright, I deleted your account for you, feel free to use `{ctx.prefix}create` at any time.')
         await ctx.send('Are you certain you wish to close your account? Type "yes" to confirm.')
 
@@ -51,8 +46,7 @@ class economy(commands.Cog):
         else:
             if msg.content.lower() == 'yes':
                 users.pop(str(ctx.author.id))
-                with open('users.json', 'w') as f:
-                    json.dump(users, f, indent=4)
+                dumpjson('users', users)
                 return await ctx.send(f'Alright, I deleted your account for you, feel free to use `{ctx.prefix}create` at any time.')
             return await ctx.send(f'Cancelled.')
 
@@ -60,8 +54,7 @@ class economy(commands.Cog):
     @check_account()
     async def bal(self, ctx):
         """Displays your balance in Stellics."""
-        with open('users.json', 'r') as f:
-            users = json.load(f)
+        users = loadjson('users')
         user = users[str(ctx.author.id)]
         embed = self.bot.Embed(
             title=f'{ctx.author.display_name}\'s balance'
@@ -73,8 +66,7 @@ class economy(commands.Cog):
     @check_account()
     async def ships(self, ctx):
         """Displays all your ships, and their stats"""
-        with open('users.json', 'r') as f:
-            users = json.load(f)
+        users = loadjson('users')
         user = users[str(ctx.author.id)]
         ships = []
         for i in user['ships']:
@@ -96,8 +88,7 @@ class economy(commands.Cog):
     async def shipinfo(self, ctx, shipname: str):
         """Displays the stats of a provided ship"""
         shipname = shipname.lower()
-        with open('users.json', 'r') as f:
-            users = json.load(f)
+        users = loadjson('users')
         user = users[str(ctx.author.id)]
         try:
             ship = user['ships'][shipname.capitalize()]
@@ -118,8 +109,7 @@ class economy(commands.Cog):
     async def planetinfo(self, ctx, planetname: str):
         """Displays the stats of a provided planet"""
         planetname = planetname.lower()
-        with open('users.json', 'r') as f:
-            users = json.load(f)
+        users = loadjson('users')
         user = users[str(ctx.author.id)]
         try:
             planet = user['planets'][planetname.capitalize()]
@@ -139,8 +129,7 @@ class economy(commands.Cog):
     @check_account()
     async def planets(self, ctx):
         """Displays all your planets, and their stats"""
-        with open('users.json', 'r') as f:
-            users = json.load(f)
+        users = loadjson('users')
         user = users[str(ctx.author.id)]
         planets = []
         for i in user['planets']:
@@ -162,11 +151,9 @@ class economy(commands.Cog):
     async def scavenge(self, ctx, shipname: str):
         """Scavenge for Stellics with a specified ship. Keep in mind that the cooldown for whichever ship you use will apply across all ships until your next scavenge."""
         shipname = shipname.lower().capitalize()
-        with open('users.json', 'r') as f:
-            users = json.load(f)
+        users = loadjson('users')
         user = users[str(ctx.author.id)]
-        with open('cooldowns.json', 'r') as f:
-            cooldowns = json.load(f)
+        cooldowns = loadjson('cooldowns')
         current = str(ctx.message.created_at)
         try:
             past = cooldowns['scavenge'].get(str(ctx.author.id))
@@ -185,13 +172,51 @@ class economy(commands.Cog):
         current = ctx.message.created_at
         current += datetime.timedelta(seconds=cooldown)
         cooldowns['scavenge'][str(ctx.author.id)] = str(current)
-        with open('cooldowns.json', 'w') as f:
-            json.dump(cooldowns, f, indent=4)
+        dumpjson('cooldowns', cooldowns)
         to_add = random.randint(2, ship['max'])
         user['balance'] += to_add
-        with open('users.json', 'w') as f:
-            json.dump(users, f, indent=4)
+        dumpjson('users', users)
         return await ctx.send(f'You managed to scavenge for {to_add} Stellics, and are now on cooldown due to your ship\'s cooldown settings.')
+
+    @commands.command()
+    @check_account()
+    async def search(self, ctx, planetname: str):
+        """Search for artifacts on a specified planet. Keep in mind that the cooldown for whichever planet you use will apply across all planets until your next search."""
+        planetname = planetname.lower().capitalize()
+        users = loadjson('users')
+        user = users[str(ctx.author.id)]
+        cooldowns = loadjson('cooldowns')
+        current = str(ctx.message.created_at)
+        try:
+            past = cooldowns['search'].get(str(ctx.author.id))
+            if past:
+                past = datetime.datetime.strptime(past, '%Y-%m-%d %H:%M:%S.%f')
+                current = datetime.datetime.strptime(
+                    current, '%Y-%m-%d %H:%M:%S.%f')
+                if current < past:
+                    return await ctx.send(f'You are still on cooldown for another {humanize.precisedelta(past-current)}, due to your planet\'s cooldown settings.')
+        except KeyError:
+            pass
+        planet = user['planets'].get(planetname)
+        if not planet:
+            return await ctx.send(f'Planet not found, make sure you own it with `{ctx.prefix}planets`.')
+        cooldown = planet['cooldown']
+        current = ctx.message.created_at
+        current += datetime.timedelta(seconds=cooldown)
+        cooldowns['search'][str(ctx.author.id)] = str(current)
+        dumpjson('cooldowns', cooldowns)
+        rng = random.randint(1, 100)
+        if rng > planet['chance']:
+            return await ctx.send('Your search yielded no results and you are now on cooldown due to your planets\'s cooldown settings.')
+        catalogue = loadjson('catalogue')
+        artifacts = catalogue['Artifacts'][1]
+        artifact = random.choice(list(artifacts))
+        if not user['inventory'].get(artifact):
+            user['inventory'][artifact] = 1
+        else:
+            user['inventory'][artifact] += 1
+        dumpjson('users', users)
+        return await ctx.send(f'Your search was successful, and you found one {artifact}! View your artifacts with `{ctx.prefix}inv` and sell your artifact(s) with `{ctx.prefix}sell`.')
 
     @commands.group(invoke_without_command=True, aliases=['store'])
     async def shop(self, ctx):
@@ -199,9 +224,8 @@ class economy(commands.Cog):
 
     @shop.command(aliases=['ship'], name='ships')
     async def shop_ships(self, ctx):
-        with open('catalogue.json', 'r') as f:
-            catalogue = json.load(f)
-        s = catalogue['Ships']
+        ca = loadjson('catalogue')
+        s = ca['Ships']
         sd = s[0]
         s.remove(sd)
         sf = []

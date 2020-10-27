@@ -33,5 +33,18 @@
                 "level": 1
             }
         }
+    ],
+
+    "Artifacts": [
+        "Artifacts are trinkets located in the depths of certain planets, perhaps from better days. Your chance of finding artifacts are based on the planet you search on, and artifacts may be sold for Stellics.",
+        {
+            "Mainecoon": "The remnants of an ancient tigress capable of surviving for centuries. These bones are very valuable indeed.",
+            "Szczerbiec": "A relatively undamaged ritual sword, used millenia-gone for the coronation of the old-world leaders.",
+            "Johndeer": "A large expedition vessel most likely used for the transportation of the old-world nuclear football and its contents.",
+            "Grunwald": "A dagger, made of the bones of soldiers long gone, still held firmly together by the blood of battle.",
+            "Ruble": "An ancient coin weighing 2 kilograms, written in ancient Russian with a value much larger than once anticipated.",
+            "Li": "A small bronze jar. The weight of its preface are unknown, although the guts of the trinket are stained deep, dark crimson",
+            "Nebra": "Some sort of disk complete with diagrams and markings worn by the seal of time. Its value remains uncertain."
+        }
     ]
 }
