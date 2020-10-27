@@ -2,3 +2,4 @@ discord==1.0.1
 
 asyncio~=3.4.3
 humanize~=3.0.1
+aiohttp~=3.6.2

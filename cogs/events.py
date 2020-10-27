@@ -1,12 +1,30 @@
 import json
 
+import aiohttp
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
+
+from .utils.commons import loadjson
 
 
 class Events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.update_dbl.start()
+
+    @tasks.loop(minutes=30)
+    async def update_dbl(self):
+        await self.bot.wait_until_ready()
+        config = loadjson('config')
+        dbl = config['dbl_token']
+        guilds = len(self.bot.guilds)
+        shards = len(self.bot.shards)
+        params = {'server_count': guilds, 'shard_count': shards}
+        async with aiohttp.ClientSession() as cs:
+            async with cs.post('https://top.gg/api/bots/758065684218380350/stats', headers={'Authorization': dbl},
+                               data=params) as resp:
+                data = await resp.json()
+        print(data)
 
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
