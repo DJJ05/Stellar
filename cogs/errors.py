@@ -3,7 +3,6 @@ from discord.ext import commands
 import traceback
 import sys
 
-
 '''
 Error Handler taken from eevie's gist, go check it out!
 https://gist.github.com/EvieePy/7822af90858ef65012ea500bcecf1612
@@ -22,12 +21,7 @@ class ErrorHandler(commands.Cog):
         if hasattr(ctx.command, 'on_error'):
             return
 
-        cog = ctx.cog
-        if cog:
-            if cog._get_overridden_method(cog.cog_command_error) is not None:
-                return
-
-        ignored = (commands.CommandNotFound, )
+        ignored = (commands.CommandNotFound,)
         error = getattr(error, 'original', error)
 
         if isinstance(error, ignored):
@@ -75,7 +69,8 @@ class ErrorHandler(commands.Cog):
                 'rajsharma', 'dev').replace('pinboard', 'stellar')
 
             embed = self.bot.Embed(title=f'Error during `{ctx.command.qualified_name}`',
-                                   description=f'ID: {ctx.message.id}\n[Jump]({ctx.message.jump_url})\n{traceback_text}')
+                                   description=f'ID: {ctx.message.id}\n[Jump]({ctx.message.jump_url})\n\
+                                                {traceback_text}')
 
             await errchannel.send(embed=embed)
             lines = traceback.format_exception(etype, error, trace, 1)

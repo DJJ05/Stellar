@@ -1,9 +1,9 @@
-import discord
-from discord.ext import commands
 import json
 
+from discord.ext import commands
 
-class events(commands.Cog):
+
+class Events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -41,8 +41,9 @@ class events(commands.Cog):
         if message.content in ('<@758065684218380350>', '<@!758065684218380350>') and not message.author.bot:
             with open('guildconfig.json', 'r') as f:
                 prefixes = json.load(f)
-            await message.channel.send(embed=self.bot.Embed(title=f'{message.guild.me.name} » {message.guild.me.id}', description=f'`My prefix for {message.guild.name} is {prefixes[str(message.guild.id)]["prefix"]}.`\n`Use {prefixes[str(message.guild.id)]["prefix"]}help to view my command list.`').set_thumbnail(url=message.guild.me.avatar_url))
+            await message.channel.send(embed=self.bot.Embed(title=f'{message.guild.me.name} » {message.guild.me.id}',
+                                                            description=f'`My prefix for {message.guild.name} is {prefixes[str(message.guild.id)]["prefix"]}.`\n`Use {prefixes[str(message.guild.id)]["prefix"]}help to view my command list.`').set_thumbnail(url=message.guild.me.avatar_url))
 
 
 def setup(bot):
-    bot.add_cog(events(bot))
+    bot.add_cog(Events(bot))

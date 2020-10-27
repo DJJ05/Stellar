@@ -1,18 +1,17 @@
-from json import dump, load
-import discord
-from discord.ext import commands, menus
-import json
 import asyncio
 import datetime
-import humanize
 import random
-from .utils.templates import NEW_ACC
+
+import humanize
+from discord.ext import commands, menus
+
 from .utils.checks import check_account
-from .utils.paginator import ShipSource, PlanetSource, ShopSource
 from .utils.commons import loadjson, dumpjson
+from .utils.paginator import ShipSource, PlanetSource, ShopSource, InvSource
+from .utils.templates import NEW_ACC
 
 
-class economy(commands.Cog):
+class Economy(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -21,7 +20,8 @@ class economy(commands.Cog):
         """Creates your Stellar account."""
         users = loadjson('users')
         if str(ctx.author.id) in users.keys():
-            return await ctx.send(f'You already have an account. Close your existing account using `{ctx.prefix}close`.')
+            return await ctx.send(
+                f'You already have an account. Close your existing account using `{ctx.prefix}close`.')
         users[str(ctx.author.id)] = NEW_ACC
         dumpjson('users', users)
         return await ctx.send('Account successfully created! Enjoy!')
@@ -34,11 +34,13 @@ class economy(commands.Cog):
         if confirm and confirm.lower() == 'yes':
             users.pop(str(ctx.author.id))
             dumpjson('users', users)
-            return await ctx.send(f'Alright, I deleted your account for you, feel free to use `{ctx.prefix}create` at any time.')
+            return await ctx.send(
+                f'Alright, I deleted your account for you, feel free to use `{ctx.prefix}create` at any time.')
         await ctx.send('Are you certain you wish to close your account? Type "yes" to confirm.')
 
         def check(m):
             return m.channel.id == ctx.channel.id and m.author.id == ctx.author.id
+
         try:
             msg = await self.bot.wait_for('message', check=check, timeout=60)
         except asyncio.TimeoutError:
@@ -47,7 +49,8 @@ class economy(commands.Cog):
             if msg.content.lower() == 'yes':
                 users.pop(str(ctx.author.id))
                 dumpjson('users', users)
-                return await ctx.send(f'Alright, I deleted your account for you, feel free to use `{ctx.prefix}create` at any time.')
+                return await ctx.send(
+                    f'Alright, I deleted your account for you, feel free to use `{ctx.prefix}create` at any time.')
             return await ctx.send(f'Cancelled.')
 
     @commands.command(aliases=['balance'])
@@ -77,7 +80,7 @@ class economy(commands.Cog):
             upgradecost = str(i['upgradecost']) + ' Stellics'
             cooldown = str(i['cooldown']) + ' seconds'
             level = str(i['level'])
-            constructed = f'__**`{name}`**__\n**Level: **{level}\n**Description: **{desc}\n**Max Scavenge: **{peak}\n**Upgrade Cost: **{upgradecost}\n**Cooldown: **{cooldown}'
+            constructed = f'__**`{name}`**__\n**Level: **{level}\n**Description: **{desc}\n**Max Scavenge: **{peak}\n**Upgrade Cost: **{upgradecost}\n**Cooldown: **{cooldown} '
             ships.append(constructed)
         pages = menus.MenuPages(source=ShipSource(
             ships), delete_message_after=True, clear_reactions_after=True)
@@ -93,13 +96,14 @@ class economy(commands.Cog):
         try:
             ship = user['ships'][shipname.capitalize()]
         except KeyError:
-            return await ctx.send(f'I couldn\'t find that ship in your account, make sure you own it. Use `{ctx.prefix}shop ships` to view info about ships you may not own.')
+            return await ctx.send(
+                f'I couldn\'t find that ship in your account, make sure you own it. Use `{ctx.prefix} shop ships` to view info about ships you may not own.')
         desc = ship['description']
         peak = str(ship['max']) + ' Stellics'
         upgradecost = str(ship['upgradecost']) + ' Stellics'
         cooldown = str(ship['cooldown']) + ' seconds'
         level = str(ship['level'])
-        constructed = f'__**`{shipname.capitalize()}`**__\n**Level: **{level}\n**Description: **{desc}\n**Max Scavenge: **{peak}\n**Upgrade Cost: **{upgradecost}\n**Cooldown: **{cooldown}'
+        constructed = f'__**`{shipname.capitalize()}`**__\n**Level: **{level}\n**Description: **{desc}\n**Max Scavenge: **{peak}\n**Upgrade Cost: **{upgradecost}\n**Cooldown: **{cooldown} '
         pages = menus.MenuPages(source=ShipSource(
             [constructed]), delete_message_after=True, clear_reactions_after=True)
         await pages.start(ctx)
@@ -114,13 +118,14 @@ class economy(commands.Cog):
         try:
             planet = user['planets'][planetname.capitalize()]
         except KeyError:
-            return await ctx.send(f'I couldn\'t find that planet in your account, make sure you own it. Use `{ctx.prefix}shop planets` to view info about planets you may not own.')
+            return await ctx.send(
+                f'I couldn\'t find that planet in your account, make sure you own it. Use `{ctx.prefix}shop planets` to view info about planets you may not own.')
         desc = planet['description']
         chance = str(planet['chance']) + '%'
         upgradecost = str(planet['upgradecost']) + ' Stellics'
         cooldown = str(planet['cooldown']) + ' seconds'
         level = str(planet['level'])
-        constructed = f'__**`{planetname.capitalize()}`**__\n**Level: **{level}\n**Description: **{desc}\n**Artifact Chance: **{chance}\n**Upgrade Cost: **{upgradecost}\n**Cooldown: **{cooldown}'
+        constructed = f'__**`{planetname.capitalize()}`**__\n**Level: **{level}\n**Description: **{desc}\n**Artifact Chance: **{chance}\n**Upgrade Cost: **{upgradecost}\n**Cooldown: **{cooldown} '
         pages = menus.MenuPages(source=PlanetSource(
             [constructed]), delete_message_after=True, clear_reactions_after=True)
         await pages.start(ctx)
@@ -140,16 +145,17 @@ class economy(commands.Cog):
             upgradecost = str(i['upgradecost']) + ' Stellics'
             cooldown = str(i['cooldown']) + ' seconds'
             level = str(i['level'])
-            constructed = f'__**`{name}`**__\n**Level: **{level}\n**Description: **{desc}\n**Artifact Chance: **{chance}\n**Upgrade Cost: **{upgradecost}\n**Cooldown: **{cooldown}'
+            constructed = f'__**`{name}`**__\n**Level: **{level}\n**Description: **{desc}\n**Artifact Chance: **{chance}\n**Upgrade Cost: **{upgradecost}\n**Cooldown: **{cooldown} '
             planets.append(constructed)
         pages = menus.MenuPages(source=PlanetSource(
             planets), delete_message_after=True, clear_reactions_after=True)
         await pages.start(ctx)
 
-    @commands.command()
+    @commands.command(aliases=['scavange'])
     @check_account()
     async def scavenge(self, ctx, shipname: str):
-        """Scavenge for Stellics with a specified ship. Keep in mind that the cooldown for whichever ship you use will apply across all ships until your next scavenge."""
+        """Scavenge for Stellics with a specified ship. Keep in mind that the cooldown for whichever ship you use
+        will apply across all ships until your next scavenge. """
         shipname = shipname.lower().capitalize()
         users = loadjson('users')
         user = users[str(ctx.author.id)]
@@ -162,7 +168,8 @@ class economy(commands.Cog):
                 current = datetime.datetime.strptime(
                     current, '%Y-%m-%d %H:%M:%S.%f')
                 if current < past:
-                    return await ctx.send(f'You are still on cooldown for another {humanize.precisedelta(past-current)}, due to your ship\'s cooldown settings.')
+                    return await ctx.send(
+                        f'You are still on cooldown for another {humanize.precisedelta(past - current)}, due to your ship\'s cooldown settings.')
         except KeyError:
             pass
         ship = user['ships'].get(shipname)
@@ -176,12 +183,14 @@ class economy(commands.Cog):
         to_add = random.randint(2, ship['max'])
         user['balance'] += to_add
         dumpjson('users', users)
-        return await ctx.send(f'You managed to scavenge for {to_add} Stellics, and are now on cooldown due to your ship\'s cooldown settings.')
+        return await ctx.send(
+            f'You managed to scavenge for {to_add} Stellics, and are now on cooldown due to your ship\'s cooldown settings.')
 
     @commands.command()
     @check_account()
     async def search(self, ctx, planetname: str):
-        """Search for artifacts on a specified planet. Keep in mind that the cooldown for whichever planet you use will apply across all planets until your next search."""
+        """Search for artifacts on a specified planet. Keep in mind that the cooldown for whichever planet you use
+        will apply across all planets until your next search. """
         planetname = planetname.lower().capitalize()
         users = loadjson('users')
         user = users[str(ctx.author.id)]
@@ -194,7 +203,8 @@ class economy(commands.Cog):
                 current = datetime.datetime.strptime(
                     current, '%Y-%m-%d %H:%M:%S.%f')
                 if current < past:
-                    return await ctx.send(f'You are still on cooldown for another {humanize.precisedelta(past-current)}, due to your planet\'s cooldown settings.')
+                    return await ctx.send(
+                        f'You are still on cooldown for another {humanize.precisedelta(past - current)} due to your planet\'s cooldown settings.')
         except KeyError:
             pass
         planet = user['planets'].get(planetname)
@@ -207,7 +217,8 @@ class economy(commands.Cog):
         dumpjson('cooldowns', cooldowns)
         rng = random.randint(1, 100)
         if rng > planet['chance']:
-            return await ctx.send('Your search yielded no results and you are now on cooldown due to your planets\'s cooldown settings.')
+            return await ctx.send(
+                'Your search yielded no results and you are now on cooldown due to your planets\'s cooldown settings.')
         catalogue = loadjson('catalogue')
         artifacts = catalogue['Artifacts'][1]
         artifact = random.choice(list(artifacts))
@@ -216,14 +227,17 @@ class economy(commands.Cog):
         else:
             user['inventory'][artifact] += 1
         dumpjson('users', users)
-        return await ctx.send(f'Your search was successful, and you found one {artifact}! View your artifacts with `{ctx.prefix}inv` and sell your artifact(s) with `{ctx.prefix}sell`.')
+        return await ctx.send(
+            f'Your search was successful, and you found one {artifact}! View your artifacts with `{ctx.prefix}inv` and sell your artifact(s) with `{ctx.prefix}sell`.')
 
     @commands.group(invoke_without_command=True, aliases=['store'])
     async def shop(self, ctx):
+        """Shop commands, displaying buy costs, upgrade costs and other information on a specifiec category."""
         await ctx.send_help(ctx.command)
 
     @shop.command(aliases=['ship'], name='ships')
     async def shop_ships(self, ctx):
+        """View information about the various ships available for purchase."""
         ca = loadjson('catalogue')
         s = ca['Ships']
         sd = s[0]
@@ -235,12 +249,34 @@ class economy(commands.Cog):
                 p = str(d['max']) + ' Stellics'
                 u = str(d['upgradecost']) + ' Stellics'
                 c = str(d['cooldown']) + ' seconds'
-                co = f'__**`{n}`**__\n**Description: **{de}\n**Base Max Scavenge: **{p}\n**Base Upgrade Cost: **{u}\n**Base Cooldown: **{c}'
+                b = str(d['buycost']) + ' Stellics'
+                co = f'__**`{n}`**__\n**Description: **{de}\n**Buy Cost: **{b}\n**Base Max Scavenge: **{p}\n**Base Upgrade Cost: **{u}\n**Base Cooldown: **{c}'
                 sf.append(co)
         pages = menus.MenuPages(source=ShopSource(
             sf), delete_message_after=True, clear_reactions_after=True)
         await pages.start(ctx)
 
+    @commands.command(aliases=['inventory'])
+    @check_account()
+    async def inv(self, ctx):
+        """Check your inventory, including all of your artifacts! If you are looking for the invite link,
+        use the invite command. """
+        u = loadjson('users')
+        c = loadjson('catalogue')
+        a = []
+        i = u[str(ctx.author.id)]['inventory']
+        if not len(i):
+            a.append(f'You do not own any artifacts! You can search for artifacts using `{ctx.prefix}search`.')
+        for n in i:
+            q = i.get(n)
+            de = c['Artifacts'][1]
+            d = de.get(n)
+            f = f'__**`{n}`**__\n**Quantity: **{q}\n**Description: **{d}'
+            a.append(f)
+        pages = menus.MenuPages(source=InvSource(
+            a), delete_message_after=True, clear_reactions_after=True)
+        await pages.start(ctx)
+
 
 def setup(bot):
-    bot.add_cog(economy(bot))
+    bot.add_cog(Economy(bot))

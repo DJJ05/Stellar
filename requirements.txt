@@ -1,4 +1,4 @@
-discord.py==1.5.0
-jishaku==1.19.1.200
 discord==1.0.1
-git+git://github.com/Rapptz/discord-ext-menus
+
+asyncio~=3.4.3
+humanize~=3.0.1

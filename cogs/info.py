@@ -12,7 +12,7 @@ class MyHelpCommand(commands.MinimalHelpCommand):
             await destination.send(embed=emby)
 
 
-class info(commands.Cog):
+class Info(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._original_help_command = bot.help_command
@@ -35,7 +35,8 @@ class info(commands.Cog):
         end = time.perf_counter()
         response = round((end - begin) * 1000)
         embed = self.bot.Embed(
-            description=f'```prolog\nShard Heartbeat: {round(shard.latency * 1000)}ms\nCommand Response: {response}ms\n```')
+            description=f'```prolog\nShard Heartbeat: {round(shard.latency * 1000)}ms\nCommand Response: {response}ms'
+                        f'\n```')
         await asyncio.sleep(0.5)
         await pong.edit(embed=embed)
 
@@ -47,10 +48,12 @@ class info(commands.Cog):
         none = 'https://discord.com/oauth2/authorize?client_id=758065684218380350&scope=bot&permissions=0'
         embed = self.bot.Embed(
             title='Invite Links:',
-            description=f'__**Bot Invite Links**__\n[__Admin__]({admin})\n[__Required__]({required})\n[__None__]({none})\n\n__**Join The Bot Server!**__\n[__Click Me__](https://discord.gg/ybZ9ZYg)'
+            description=f'__**Bot Invite Links**__\n[__Admin__]({admin})\n[__Required__]({required})\n'
+                        f'[__None__]({none})\n\n__**Join The Bot Server!**__\n'
+                        f'[__Click Me__](https://discord.gg/ybZ9ZYg) '
         )
         return await ctx.send(embed=embed)
 
 
 def setup(bot):
-    bot.add_cog(info(bot))
+    bot.add_cog(Info(bot))
