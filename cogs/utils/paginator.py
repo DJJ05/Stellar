@@ -55,7 +55,7 @@ class InvSource(menus.ListPageSource):
         offset = menu.current_page * self.per_page
         a = ''.join(f'{v}' for i, v in enumerate(entries, start=offset))
         a = discord.Embed(
-            title='Artifacts',
+            title='Inventory',
             description=f'{a}',
             colour=0x7649fe
         )

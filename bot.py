@@ -31,7 +31,10 @@ class Bot(commands.AutoShardedBot):
     async def get_prefix(self, message: discord.Message) -> str:
         with open('guildconfig.json', 'r') as f:
             prefixes = json.load(f)
-        guild_prefix = prefixes[str(message.guild.id)]["prefix"]
+        try:
+            guild_prefix = prefixes[str(message.guild.id)]["prefix"]
+        except KeyError:
+            guild_prefix = 'st+'
         return commands.when_mentioned_or(guild_prefix)(self, message)
 
     async def get_context(self, message, *, cls=None):
