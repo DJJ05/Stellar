@@ -1,7 +1,7 @@
 import json
 
 
-def getallcustoms(object) -> dict:
+def getallcustoms(object) -> str:
     dicted = {}
     for i in dir(object):
         if not str(i).startswith('__') and not str(getattr(object, i)).startswith('<'):
