@@ -293,7 +293,6 @@ class Economy(commands.Cog):
     # TODO: DEV COG: manual removal, giving etc
     # TODO: Config cog for guild-specifics
     # TODO: Meta commands - about
-    # TODO: On_guild_join
 
 
 def setup(bot):

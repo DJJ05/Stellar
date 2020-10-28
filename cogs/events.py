@@ -19,12 +19,12 @@ class Events(commands.Cog):
         dbl = config['dbl_token']
         guilds = len(self.bot.guilds)
         shards = len(self.bot.shards)
-        params = {'server_count': guilds, 'shard_count': shards}
+        params = dict(server_count=guilds, shard_count=shards)
         async with aiohttp.ClientSession() as cs:
-            async with cs.post('https://top.gg/api/bots/758065684218380350/stats', headers={'Authorization': dbl},
+            async with cs.post('https://top.gg/api/bots/758065684218380350/stats', headers=dict(Authorization=dbl),
                                data=params) as resp:
                 data = await resp.json()
-        print(data)
+        return data
 
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
