@@ -1,7 +1,8 @@
+import asyncio
+import time
+
 import discord
 from discord.ext import commands
-import time
-import asyncio
 
 
 class MyHelpCommand(commands.MinimalHelpCommand):

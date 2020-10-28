@@ -1,9 +1,11 @@
-import discord
-from discord.ext import commands
-from subclasses import intents, StellarColour, StellarContext, StellarEmbed
+import asyncio
 import json
 import os
-import asyncio
+
+import discord
+from discord.ext import commands
+
+from subclasses import intents, StellarColour, StellarContext, StellarEmbed
 
 os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
 os.environ["JISHAKU_NO_DM_TRACEBACK"] = "True"

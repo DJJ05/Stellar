@@ -1,7 +1,8 @@
+import sys
+import traceback
+
 import discord
 from discord.ext import commands
-import traceback
-import sys
 
 '''
 Error Handler taken from eevie's gist, go check it out!
