@@ -29,6 +29,15 @@ class Dev(commands.Cog):
         dumpjson('users', us)
         return await ctx.send(f'Added `{amount}` Stellics to {m}\'s account.')
 
+    @dev.command()
+    async def recover(self, ctx):
+        """Manually resets all guild configs with default prefixes."""
+        gc = dict()
+        for g in self.bot.guilds:
+            gc[str(g.id)] = dict(prefix="st+")
+        dumpjson('guildconfig', gc)
+        return await ctx.send('Alright, all done.')
+
 
 def setup(bot):
     bot.add_cog(Dev(bot))
