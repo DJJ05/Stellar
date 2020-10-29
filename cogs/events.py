@@ -26,9 +26,9 @@ class Events(commands.Cog):
                 data = await resp.json()
         return data
 
-    @commands.Cog.listener()
+    '''@commands.Cog.listener()
     async def on_message_edit(self, before, after):
-        await self.bot.process_commands(after)
+        await self.bot.process_commands(after)'''
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
