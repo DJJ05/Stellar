@@ -87,7 +87,7 @@ class Crates(commands.Cog):
         for p in ps:
             b = u[str(ctx.author.id)]['balance']
             a = b * p
-            nb = b + a
+            nb = b + a + 50
             u[str(ctx.author.id)]['balance'] = round(nb)
         u[str(ctx.author.id)]['crates'][cratename] -= quantity
         dumpjson('users', u)
