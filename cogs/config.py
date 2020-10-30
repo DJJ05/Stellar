@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-from .utils.commons import loadjson
+from .utils.commons import loadjson, dumpjson
 
 
 class Config(commands.Cog):
@@ -15,7 +15,7 @@ class Config(commands.Cog):
         else:
             return False
 
-    @commands.group(aliases=['pre'])
+    @commands.group(aliases=['pre'], invoke_without_command=True)
     async def prefix(self, ctx):
         """Prefix configuration commands"""
         gc = loadjson('guildconfig')
@@ -25,9 +25,21 @@ class Config(commands.Cog):
     @prefix.command(name='change')
     async def prefix_change(self, ctx, newprefix: str = 'st+'):
         gc = loadjson('guildconfig')
-        gp = gc[str(ctx.guild.id)]['prefix']
+        g = gc[str(ctx.guild.id)]
+        gp = g['prefix']
+
         if newprefix == gp:
             return await ctx.send('This is already the guild prefix!')
+
+        if newprefix == 'st+':
+            m = 'reset'
+        else:
+            m = 'changed'
+
+        g['prefix'] = newprefix
+
+        dumpjson('guildconfig', gc)
+        return await ctx.send(f'Successfully {m} guild prefix to {newprefix}')
 
 
 def setup(bot):
