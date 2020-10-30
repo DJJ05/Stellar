@@ -265,20 +265,26 @@ class Economy(commands.Cog):
         c = loadjson('catalogue')
         a = []
         i = u[str(ctx.author.id)]['inventory']
-        if not len(i):
-            a.append(f'You do not own any artifacts! You can search for artifacts using `{ctx.prefix}search`.')
+        cr = u[str(ctx.author.id)]['crates']
+        if not len(i) and not len(cr):
+            a.append(
+                f'You do not own any items! You can search for artifacts using `{ctx.prefix}search` and get crates by using `{ctx.prefix}vote`.')
         for n in i:
             q = i.get(n)
             de = c['Artifacts'][1]
             d = de.get(n)
             f = f'__**`{n}`**__\n**Quantity: **{q}\n**Description: **{d}'
             a.append(f)
+        for ni in cr:
+            v = cr.get(ni)
+            f = f'__**`Voter Crates`**__\n**Quantity: **{v}'
+            a.append(f)
         pages = menus.MenuPages(source=InvSource(
-            a), delete_message_after=True, clear_reactions_after=True)
+            a), clear_reactions_after=True)
         await pages.start(ctx)
 
-    # TODO: Add leaderboard guild specific command
-    # TODO: Add sell command
+    # TODO: Add leaderboard guild specific command 🔴 - 3
+    # TODO: Add sell command 🔴 - 2
     # TODO: Trading command?
     # TODO: More artifacts ships planets etc
     # TODO: Pets
@@ -286,7 +292,8 @@ class Economy(commands.Cog):
     # TODO: Pay and ask for? Maybe opt-in to getting DMed about payment requests
     # TODO: Rob? No idea how but guild specific for sure, passive?
     # TODO: Giveaways in support server
-    # TODO: Voting crates once top.gg 🔴
+    # TODO: Open command 🔴 - 1
+    # TODO: Vote command 🔴 - 1.5
     # TODO: Regular buy crates? 🟠
     # TODO: Global leaderboard? Might be resource intensive
     # TODO: Config cog for guild-specifics
