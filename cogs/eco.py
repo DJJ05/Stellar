@@ -283,21 +283,19 @@ class Economy(commands.Cog):
             a), clear_reactions_after=True)
         await pages.start(ctx)
 
-    # TODO: Add leaderboard guild specific command 🔴 - 3
-    # TODO: Add sell command 🔴 - 2
-    # TODO: Trading command?
-    # TODO: More artifacts ships planets etc
-    # TODO: Pets
-    # TODO: Market?
-    # TODO: Pay and ask for? Maybe opt-in to getting DMed about payment requests
-    # TODO: Rob? No idea how but guild specific for sure, passive?
-    # TODO: Giveaways in support server
-    # TODO: Open command 🔴 - 1
-    # TODO: Vote command 🔴 - 1.5
-    # TODO: Regular buy crates? 🟠
-    # TODO: Global leaderboard? Might be resource intensive
-    # TODO: Config cog for guild-specifics
-    # TODO: Meta commands - about
+    # TODO: Add leaderboard guild specific command 🟠
+    # TODO: Add sell command 🔴
+    # TODO: Trading command? 🟠
+    # TODO: More artifacts ships planets etc 🔴
+    # TODO: Pets 🟡
+    # TODO: Market? 🟡
+    # TODO: Pay and ask for? Maybe opt-in to getting DMed about payment requests 🟠
+    # TODO: Rob? No idea how but guild specific for sure, passive? 🟠
+    # TODO: Giveaways in support server 🔴
+    # TODO: buy command inc. crates 🔴
+    # TODO: Global leaderboard? Might be resource intensive 🟡
+    # TODO: Config cog for guild-specifics 🟠
+    # TODO: Meta commands - about 🟠
 
 
 def setup(bot):

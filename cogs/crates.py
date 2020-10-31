@@ -21,6 +21,7 @@ class Crates(commands.Cog):
 
     @tasks.loop(minutes=1.5)
     async def check_voters(self):
+        await self.bot.wait_until_ready()
         us = loadjson('users')
         r = await getvotes()
         li = []
@@ -48,6 +49,7 @@ class Crates(commands.Cog):
             except KeyError:
                 us[str(u)]['crates']['voter'] = a
         dumpjson('users', us)
+        return
 
     @commands.command()
     async def vote(self, ctx):
