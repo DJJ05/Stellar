@@ -37,17 +37,18 @@ class Crates(commands.Cog):
             return
         for u, a in di.items():
             if u not in us:
-                continue
-            m = await self.bot.fetch_user(u)
-            try:
-                await m.send(
-                    f'Thank you for voting for me! You have recieved {a} voter crates as a reward! Use the `open` command to open them!')
-            except discord.Forbidden:
                 pass
-            try:
-                us[str(u)]['crates']['voter'] += a
-            except KeyError:
-                us[str(u)]['crates']['voter'] = a
+            else:
+                m = await self.bot.fetch_user(u)
+                try:
+                    await m.send(
+                        f'Thank you for voting for me! You have recieved {a} voter crates as a reward! Use the `open` command to open them!')
+                except discord.Forbidden:
+                    pass
+                try:
+                    us[str(u)]['crates']['voter'] += a
+                except KeyError:
+                    us[str(u)]['crates']['voter'] = a
         dumpjson('users', us)
         return
 
