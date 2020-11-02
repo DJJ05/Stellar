@@ -51,13 +51,3 @@ class Bot(commands.AutoShardedBot):
 
     def run(self):
         super().run(parsetoken())
-
-
-def main():
-    event_loop = asyncio.get_event_loop()
-    bot = Bot(event_loop=event_loop)
-    bot.run()
-
-
-if __name__ == '__main__':
-    main()
